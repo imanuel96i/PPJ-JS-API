@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/products 
+Content-Type: application/json
+
+{
+    "title": "Teclado Razer Original",
+    "price": 89990,
+    "img": "teclado_razer.png"
+}
