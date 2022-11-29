@@ -1,5 +1,6 @@
 // import express from 'express'
 const express = require('express')
+const {ListProduct, FindProduct, DeleteProduct, NewProduct} = require('./src/products')
 // import {productsSlider, products, categories, shoppingCart} from './data.js'
 let {products, productsSlider, categories, shoppingCart} = require('./data')
 
@@ -13,43 +14,25 @@ app.get('/', (request, response) => {
 
 //Lista de todos los productos
 app.get('/api/products', (request, response) => {
-    response.json(products)
+    ListProduct(response)
 })
 
 //Listar producto por ID
 app.get('/api/products/:id', (request, response) => {
     const id = parseInt(request.params.id)
-    const product = products.find(pro => pro.id === id)
-    product ? response.json(product) : response.status(404).end()
+    FindProduct(response, id)
 })
 
 //Elimina productos por ID
 app.delete('/api/products/:id', (request, response) => {
     const id = parseInt(request.params.id)
-    products = products.filter(pro => pro.id !== id)
-    products ? response.status(204).end() : response.json({
-        'Error': 'Hubo un error en el consumo de api'
-    })
+    DeleteProduct(response,id)
 })
 
 //Crea un nuevo producto
 app.post('/api/products', (request, response) => {
-    let produ = request.body
-
-    let ids = products.map(pro => pro.id)
-    let maxId = Math.max(...ids)
-
-    let newProduct = {
-        id: maxId + 1,
-        title: produ.title,
-        price: produ.price,
-        img: produ.img
-    }
-
-    console.log(newProduct)
-    products = [...products,newProduct]
-    // products = products.concat(newProduct)
-    response.json(newProduct)
+    const produ = request.body
+    NewProduct(response, produ)
 })
 
 const PORT = 3001
