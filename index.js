@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const { ListProduct, FindProduct, DeleteProduct, NewProduct, ModProduct} = require('./src/RestProducts')
 const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie, ModCategorie } = require('./src/RestCategories')
 const { ListSlider, FindSlider, DeleteSlider, NewSlider, ModSlider} = require('./src/RestSliderProducts')
@@ -14,6 +15,7 @@ const app = express()
 const logger = require('./logger')
 
 app.use(express.json())
+app.use(cors())
 
 //Muestra por consola el consumo de la Api
 app.use(logger)
