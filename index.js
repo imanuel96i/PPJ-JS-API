@@ -1,6 +1,7 @@
 const express = require('express')
 const { ListProduct, FindProduct, DeleteProduct, NewProduct } = require('./src/RestProducts')
-const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie} = require('./src/RestCategories')
+const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie } = require('./src/RestCategories')
+const { ListSlider, FindSlider, DeleteSlider, NewSlider} = require('./src/RestSliderProducts')
 
 /*
  * @author Manuel Vidal García
@@ -33,6 +34,11 @@ app.get('/api/categories', (request, response) => {
     ListCategories(response)
 })
 
+//Listar productos del slider
+app.get('/api/slider', (request, response) => {
+    ListSlider(response)
+})
+
 //!Api Buscar
 //Buscar producto por id
 app.get('/api/products/:id', (request, response) => {
@@ -44,6 +50,12 @@ app.get('/api/products/:id', (request, response) => {
 app.get('/api/categories/:id', (request, response) => {
     const id = parseInt(request.params.id)
     FindCategorie(response, id)
+})
+
+//Buscar producto del slider por id
+app.get('/api/slider/:id', (request, response) => {
+    const id = parseInt(request.params.id)
+    FindSlider(response, id)
 })
 
 //!Api Eliminar
@@ -59,6 +71,12 @@ app.delete('/api/categories/:id', (request, response) => {
     DeleteCategorie(response,id)
 })
 
+//Eliminar producto del slider por id
+app.delete('/api/slider/:id', (request, response) => {
+    const id = parseInt(request.params.id)
+    DeleteSlider(response,id)
+})
+
 //!Api Creación
 //Crea un nuevo producto
 app.post('/api/products', (request, response) => {
@@ -70,6 +88,12 @@ app.post('/api/products', (request, response) => {
 app.post('/api/categories', (request, response) => {
     const cate = request.body
     NewCategorie(response, cate)
+})
+
+//Añade un producto al slider 
+app.post('/api/slider', (request, response) => {
+    const cate = request.body
+    NewSlider(response, cate)
 })
 
 //Muestra error al entrar a un path no existente
