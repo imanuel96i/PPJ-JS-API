@@ -1,4 +1,4 @@
-let { products } = require('../data')
+let { products } = require('./data')
 
 const ListProduct = (res) => {
     products ? res.json(products) : res.status(404).json({'Error': 'Hubo un error en el consumo de api'}).end()

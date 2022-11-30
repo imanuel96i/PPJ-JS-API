@@ -1,11 +1,12 @@
-// import express from 'express'
 const express = require('express')
-const {ListProduct, FindProduct, DeleteProduct, NewProduct} = require('./src/products')
-// import {productsSlider, products, categories, shoppingCart} from './data.js'
-let {products, productsSlider, categories, shoppingCart} = require('./data')
+const { ListProduct, FindProduct, DeleteProduct, NewProduct } = require('./src/RestProducts')
 
 const app = express()
+const logger = require('./logger')
+
 app.use(express.json())
+
+app.use(logger)
 
 //Pagina inicial Api
 app.get('/', (request, response) => {
@@ -33,6 +34,13 @@ app.delete('/api/products/:id', (request, response) => {
 app.post('/api/products', (request, response) => {
     const produ = request.body
     NewProduct(response, produ)
+})
+
+
+app.use((request, response) => {
+    response.status(404).json({
+        error: 'Not Found'
+    })
 })
 
 const PORT = 3001
