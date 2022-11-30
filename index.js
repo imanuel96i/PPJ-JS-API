@@ -1,11 +1,19 @@
 const express = require('express')
 const { ListProduct, FindProduct, DeleteProduct, NewProduct } = require('./src/RestProducts')
 
+/*
+ * @author Manuel Vidal García
+ * Contacto: mvidal@acl.cl
+ * Fecha creación: 29/11/2022
+ * Fecha ultima modificación: 30/11/2022
+*/
+
 const app = express()
 const logger = require('./logger')
 
 app.use(express.json())
 
+//Muestra por consola el consumo de la API
 app.use(logger)
 
 //Pagina inicial Api
@@ -36,7 +44,7 @@ app.post('/api/products', (request, response) => {
     NewProduct(response, produ)
 })
 
-
+//Muestra error al entrar a un path no existente
 app.use((request, response) => {
     response.status(404).json({
         error: 'Not Found'
