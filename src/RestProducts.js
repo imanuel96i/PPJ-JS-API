@@ -9,13 +9,13 @@ let { products } = require('./data')
 
 //Lista los productos
 const ListProduct = (res) => {
-    products ? res.json(products) : res.status(404).json({'Error': 'Hubo un error en el consumo de api'}).end()
+    products ? res.json(products).end() : res.status(404).json({'Error': 'Hubo un error en el consumo de api'}).end()
 }
 
 //Busca producto por id
 const FindProduct = (res, id) => {
     const product = products.find(pro => pro.id === id)
-    product ? res.json(product) : res.status(400).json({'Error': 'No se ha encontrado el producto o hubo un error'}).end()
+    product ? res.json(product).end() : res.status(400).json({'Error': 'No se ha encontrado el producto o hubo un error'}).end()
 }
 
 //Elimina un producto por id
@@ -43,7 +43,7 @@ const NewProduct = (res, body) => {
     if (typeof body.img !== 'string') {
         return res.status(400).json({ error: 'El img debe ser un string' }).end()
     }
-    
+
     let ids = products.map(pro => pro.id)
     let maxId = Math.max(...ids)
 
@@ -55,7 +55,33 @@ const NewProduct = (res, body) => {
     }
 
     products = [...products,newProduct]
-    res.json(newProduct)
+    res.json(newProduct).end()
 }
 
-module.exports = {ListProduct, FindProduct, DeleteProduct, NewProduct}
+//Modifica un producto por id
+const ModProduct = (res, id, body) => {
+    const mdpro = products.find(pro => pro.id === id)
+    if (mdpro) {
+        if (!body || !body.title || !body.price || !body.img) {
+            return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
+        }
+        if (typeof body.title !== 'string') {
+            return res.status(400).json({ error: 'El title debe ser un string' }).end()
+        }
+        if (typeof body.price !== 'number') {
+            return res.status(400).json({ error: 'El price debe ser un number' }).end()
+        }
+        if (typeof body.img !== 'string') {
+            return res.status(400).json({ error: 'El img debe ser un string' }).end()
+        }
+
+        mdpro.title = body.title
+        mdpro.price = body.price
+        mdpro.img = body.img
+        res.json(mdpro).end()
+    } else {
+        return res.status(400).json({ error: 'No se encontro un producto para modificar u ocurrio un error inesperado' }).end()
+    }
+}
+
+module.exports = {ListProduct, FindProduct, DeleteProduct, NewProduct, ModProduct}

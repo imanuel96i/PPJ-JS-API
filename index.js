@@ -1,7 +1,7 @@
 const express = require('express')
-const { ListProduct, FindProduct, DeleteProduct, NewProduct } = require('./src/RestProducts')
-const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie } = require('./src/RestCategories')
-const { ListSlider, FindSlider, DeleteSlider, NewSlider} = require('./src/RestSliderProducts')
+const { ListProduct, FindProduct, DeleteProduct, NewProduct, ModProduct} = require('./src/RestProducts')
+const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie, ModCategorie } = require('./src/RestCategories')
+const { ListSlider, FindSlider, DeleteSlider, NewSlider, ModSlider} = require('./src/RestSliderProducts')
 
 /*
  * @author Manuel Vidal García
@@ -92,15 +92,38 @@ app.post('/api/categories', (request, response) => {
 
 //Añade un producto al slider 
 app.post('/api/slider', (request, response) => {
-    const cate = request.body
-    NewSlider(response, cate)
+    const sli = request.body
+    NewSlider(response, sli)
 })
 
+//!Api Modificación
+//Modifica un producto
+app.put('/api/products/:id', (request, response) => {
+    const id = parseInt(request.params.id)
+    const pro = request.body
+    ModProduct(response, id, pro)
+})
+
+//Modifica un producto del slider
+app.put('/api/slider/:id', (request, response) => {
+    const id = parseInt(request.params.id)
+    const pro = request.body
+    ModSlider(response, id, pro)
+})
+
+//Modifica una categoria
+app.put('/api/categories/:id', (request, response) => {
+    const id = parseInt(request.params.id)
+    const cat = request.body
+    ModCategorie(response, id, cat)
+})
+
+//!Api path no existente
 //Muestra error al entrar a un path no existente
 app.use((request, response) => {
     response.status(404).json({
         error: 'Not Found'
-    })
+    }).end()
 })
 
 const PORT = 3001

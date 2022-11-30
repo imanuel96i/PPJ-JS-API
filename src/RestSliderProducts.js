@@ -16,7 +16,7 @@ const DeleteSlider = (res, id) => {
     const slider = productsSlider.find(pro => pro.id === id)
     if (slider) {
         productsSlider = productsSlider.filter(pro => pro.id !== id)
-        res.status(200).json({ 'Mensaje': 'Se ha eliminado el producto del slider' })
+        res.status(200).json({ 'Mensaje': 'Se ha eliminado el producto del slider' }).end()
     } else {
         res.status(400).json({ 'Error': 'Hubo un error en la eliminación del producto en el slider' }).end()
     }
@@ -51,4 +51,30 @@ const NewSlider = (res, body) => {
     res.json(newSlider)
 }
 
-module.exports = { ListSlider, FindSlider, DeleteSlider, NewSlider}
+//Modifica un producto del slider por id
+const ModSlider = (res, id, body) => {
+    const prosli = productsSlider.find(pro => pro.id === id)
+    if (prosli) {
+        if (!body || !body.title || !body.price || !body.img) {
+            return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
+        }
+        if (typeof body.title !== 'string') {
+            return res.status(400).json({ error: 'El title debe ser un string' }).end()
+        }
+        if (typeof body.price !== 'number') {
+            return res.status(400).json({ error: 'El price debe ser un number' }).end()
+        }
+        if (typeof body.img !== 'string') {
+            return res.status(400).json({ error: 'El img debe ser un string' }).end()
+        }
+
+        prosli.title = body.title
+        prosli.price = body.price
+        prosli.img = body.img
+        res.json(prosli).end()
+    } else {
+        return res.status(400).json({ error: 'No se encontro un producto para modificar u ocurrio un error inesperado' }).end()
+    }
+}
+
+module.exports = { ListSlider, FindSlider, DeleteSlider, NewSlider, ModSlider}
