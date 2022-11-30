@@ -34,6 +34,15 @@ const NewProduct = (res, body) => {
     if (!body || !body.title || !body.price || !body.img) {
         return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
     }
+    if (typeof body.title !== 'string') {
+        return res.status(400).json({ error: 'El title debe ser un string' }).end()
+    }
+    if (typeof body.price !== 'number') {
+        return res.status(400).json({ error: 'El price debe ser un number' }).end()
+    }
+    if (typeof body.img !== 'string') {
+        return res.status(400).json({ error: 'El img debe ser un string' }).end()
+    }
     
     let ids = products.map(pro => pro.id)
     let maxId = Math.max(...ids)
