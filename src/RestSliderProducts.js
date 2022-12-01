@@ -38,7 +38,9 @@ const NewSlider = (res, body) => {
     }
 
     let ids = productsSlider.map(pro => pro.id)
-    let maxId = Math.max(...ids)
+    let maxId
+    
+    ids.length === 0 ? maxId = 0 : maxId = Math.max(...ids)
 
     let newSlider = {
         id: maxId + 1,

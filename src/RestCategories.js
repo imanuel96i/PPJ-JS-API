@@ -35,7 +35,9 @@ const NewCategorie = (res, body) => {
     }
     
     let ids = categories.map(pro => pro.id)
-    let maxId = Math.max(...ids)
+    let maxId
+    
+    ids.length === 0 ? maxId = 0 : maxId = Math.max(...ids)
 
     let newCategorie = {
         id: maxId + 1,

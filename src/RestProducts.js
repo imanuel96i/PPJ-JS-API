@@ -44,9 +44,11 @@ const NewProduct = (res, body) => {
         return res.status(400).json({ error: 'El img debe ser un string' }).end()
     }
 
+    let maxId
     let ids = products.map(pro => pro.id)
-    let maxId = Math.max(...ids)
 
+    ids.length === 0 ? maxId = 0 : maxId = Math.max(...ids)
+    
     let newProduct = {
         id: maxId + 1,
         title: body.title,
