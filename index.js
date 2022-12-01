@@ -2,17 +2,17 @@ const express = require('express')
 const cors = require('cors')
 const { ListProduct, FindProduct, DeleteProduct, NewProduct, ModProduct} = require('./src/RestProducts')
 const { ListCategories, FindCategorie, DeleteCategorie, NewCategorie, ModCategorie } = require('./src/RestCategories')
-const { ListSlider, FindSlider, DeleteSlider, NewSlider, ModSlider} = require('./src/RestSliderProducts')
+const { ListSlider, FindSlider, DeleteSlider, NewSlider, ModSlider } = require('./src/RestSliderProducts')
+const logger = require('./logger')
 
 /*
  * @author Manuel Vidal García
  * Contacto: mvidal@acl.cl
  * Fecha creación: 29/11/2022
- * Fecha ultima modificación: 30/11/2022
+ * Fecha ultima modificación: 01/12/2022
 */
 
 const app = express()
-const logger = require('./logger')
 
 app.use(express.json())
 app.use(cors())

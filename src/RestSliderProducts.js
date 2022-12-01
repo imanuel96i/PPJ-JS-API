@@ -1,5 +1,12 @@
 let { productsSlider } = require('./data')
 
+/*
+ * @author Manuel Vidal García
+ * Contacto: mvidal@acl.cl
+ * Fecha creación: 29/11/2022
+ * Fecha ultima modificación: 01/12/2022
+*/
+
 //Lista los productos del slider
 const ListSlider = (res) => {
     productsSlider ? res.json(productsSlider) : res.status(404).json({'Error': 'Hubo un error en el consumo de api'}).end()
