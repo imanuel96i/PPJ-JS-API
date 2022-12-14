@@ -1,32 +1,37 @@
-let { categories } = require('./data')
+const Categorie = require('./model/ModelCategorie')
 
 /*
  * @author Manuel Vidal García
  * Contacto: mvidal@acl.cl
  * Fecha creación: 29/11/2022
- * Fecha ultima modificación: 01/12/2022
+ * Fecha ultima modificación: 14/12/2022
 */
 
 //Listar categorias
 const ListCategories = (res) => {
-    categories ? res.json(categories).end() : res.status(404).json({'Error': 'Hubo un error en el consumo de api'}).end()
+    Categorie.find().then(result => {
+        res.json(result).end()
+    }).catch(err => {
+        res.status(404).json({ 'Error': 'Hubo un error en el consumo de api', 'ErrorMongo': err }).end()
+    })
 }
 
 //Buscar categoria por id
 const FindCategorie = (res, id) => {
-    const categorie = categories.find(pro => pro.id === id)
-    categorie ? res.json(categorie).end() : res.status(400).json({'Error': 'No se ha encontrado la categoria o hubo un error'}).end()
+    Categorie.findById(id).then(result => {
+        res.json(result).end()
+    }).catch(err => {
+        res.status(400).json({ 'Error': 'No se ha encontrado la categoria o hubo un error', 'ErrorMongo': err }).end()
+    })
 }
 
 //Eliminar categoria por id
 const DeleteCategorie = (res, id) => {
-    const categorie = categories.find(pro => pro.id === id)
-    if (categorie) {
-        categories = categories.filter(pro => pro.id !== id)
-        res.status(200).json({ 'Mensaje': 'Se ha eliminado la categoria' }).end()
-    } else {
-        res.status(400).json({ 'Error': 'Hubo un error en la eliminación de la categoria' }).end()
-    }
+    Categorie.findByIdAndRemove(id).then(result => {
+        res.json(result).end()
+    }).catch(err => {
+        res.status(400).json({ 'Error': 'Hubo un error en la eliminación de la categoria', 'ErrorMongo': err }).end()
+    })
 }
 
 //Crear nueva categoria
@@ -35,47 +40,66 @@ const NewCategorie = (res, body) => {
         return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
     }
     if (typeof body.title !== 'string') {
-        return res.status(400).json({ error: 'El title debe ser un string' }).end()
+        return res.status(400).json({ error: 'El titulo debe ser un string' }).end()
     }
     if (typeof body.img !== 'string') {
-        return res.status(400).json({ error: 'El img debe ser un string' }).end()
+        return res.status(400).json({ error: 'La imagen debe ser un string' }).end()
     }
-    
-    let ids = categories.map(pro => pro.id)
-    let maxId
-    
-    ids.length === 0 ? maxId = 0 : maxId = Math.max(...ids)
 
-    let newCategorie = {
-        id: maxId + 1,
+    const newCategorie = new Categorie({
         title: body.title,
+        price: body.price,
         img: body.img
-    }
+    })
 
-    categories = [...categories,newCategorie]
-    res.json(newCategorie).end()
+    newCategorie.save()
+        .then(result => {
+            res.json(result).end()
+        }).catch(err => {
+            res.status(400).json({Error: err }).end()
+        })
 }
 
-//Modifica un producto por id
+//Modifica una categoria por id
 const ModCategorie = (res, id, body) => {
-    const cate = categories.find(cat => cat.id === id)
-    if (cate) {
-        if (!body || !body.title || !body.img) {
-            return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
-        }
-        if (typeof body.title !== 'string') {
-            return res.status(400).json({ error: 'El title debe ser un string' }).end()
-        }
-        if (typeof body.img !== 'string') {
-            return res.status(400).json({ error: 'El img debe ser un string' }).end()
-        }
-
-        cate.title = body.title
-        cate.img = body.img
-        res.json(cate).end()
-    } else {
-        return res.status(400).json({ error: 'No se encontro una categoria para modificar u ocurrio un error inesperado' }).end()
+    if (!body || !body.title || !body.img) {
+        return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
     }
+    if (typeof body.title !== 'string') {
+        return res.status(400).json({ error: 'El titulo debe ser un string' }).end()
+    }
+    if (typeof body.img !== 'string') {
+        return res.status(400).json({ error: 'La imagen debe ser un string' }).end()
+    }
+
+    Categorie.findByIdAndUpdate(id, body, {new: true}).then(result => {
+        res.json(result).end()
+    }).catch(err => {
+        return res.status(400).json({ Error: 'No se encontro una categoria para modificar u ocurrio un error inesperado', ErrorMongo: err }).end()
+    })
 }
 
-module.exports = { ListCategories, FindCategorie, DeleteCategorie, NewCategorie, ModCategorie}
+//Modifica parte de una categoria por id
+const ModOneCategorie = (res, id, body) => {
+    if (!body) {
+        return res.status(400).json({ error: 'Ocurrio un problema, faltan datos o existe un problema en la api' }).end()
+    }
+    if (body.title) {
+        if (typeof body.title !== 'string') {
+            return res.status(400).json({ error: 'El titulo debe ser un string' }).end()
+        }
+    }
+    if (body.img) {
+        if (typeof body.img !== 'string') {
+            return res.status(400).json({ error: 'La imagen debe ser un string' }).end()
+        }
+    }
+    
+    Categorie.findByIdAndUpdate(id,{$set: body} , {new: true}).then(result => {
+        res.json(result).end()
+    }).catch(err => {
+        return res.status(400).json({ Error: 'No se encontro una categoria para modificar u ocurrio un error inesperado', ErrorMongo: err }).end()
+    })
+}
+
+module.exports = { ListCategories, FindCategorie, DeleteCategorie, NewCategorie, ModCategorie, ModOneCategorie}
