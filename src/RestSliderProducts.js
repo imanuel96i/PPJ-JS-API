@@ -4,7 +4,7 @@ const Slider = require('./model/ModelSlider')
  * @author Manuel Vidal García
  * Contacto: mvidal@acl.cl
  * Fecha creación: 29/11/2022
- * Fecha ultima modificación: 14/12/2022
+ * Fecha ultima modificación: 19/12/2022
 */
 
 //Lista los productos del slider

@@ -159,7 +159,6 @@ app.use((request, response) => {
     }).end()
 })
 
-const PORT = 3001
-app.listen(PORT, ()=> {
-    console.log(`Server runing on port ${PORT}`)
+app.listen(process.env.PORT, ()=> {
+    console.log(`Server runing on port ${process.env.PORT}`)
 })
