@@ -11,7 +11,7 @@ const logger = require('./logger')
  * @author Manuel Vidal García
  * Contacto: mvidal@acl.cl
  * Fecha creación: 29/11/2022
- * Fecha ultima modificación: 14/12/2022
+ * Fecha ultima modificación: 21/12/2022
 */
 mongoose.set('strictQuery', true)
 mongoose.connect(process.env.DB)
